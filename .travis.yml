@@ -1,0 +1,20 @@
+language: go
+sudo: false
+
+cache:
+  directories:
+    - $HOME/qemu
+env:
+  - TRAVIS_GOARCH=mips QEMU_ARCHES=mips
+  - TRAVIS_GOARCH=mipsel QEMU_ARCHES=mipsel
+
+before_install:
+  - export GOARCH=$TRAVIS_GOARCH
+
+before_script:
+  - bash -e ci/travis-qemu.sh
+  - export PATH=$PATH:$HOME/qemu/bin
+
+script:
+  - go build hello.go
+  - qemu-$QEMU_ARCHES hello
